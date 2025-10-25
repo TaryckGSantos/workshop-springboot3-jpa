@@ -17,19 +17,21 @@ import jakarta.persistence.Table;
 @Table(name = "tb_category")
 public class Category implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
-	
+
 	@ManyToMany(mappedBy = "categories")
 	@JsonIgnore
 	private Set<Product> products = new HashSet<>();
-	
+
+	private Boolean active = true;
+
 	public Category() {
 	}
-	
+
 	public Category(Long id, String name) {
 		super();
 		this.id = id;
@@ -51,9 +53,17 @@ public class Category implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public Set<Product> getProducts() {
 		return products;
+	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 
 	@Override
