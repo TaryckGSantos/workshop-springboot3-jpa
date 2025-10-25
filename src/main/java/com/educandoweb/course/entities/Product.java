@@ -20,6 +20,8 @@ import jakarta.persistence.Table;
 @Table(name = "tb_product")
 public class Product implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	private Boolean active = true;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -93,6 +95,14 @@ public class Product implements Serializable {
 		return categories;
 	}
 	
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+
 	@JsonIgnore
 	public Set<Order> getOrders(){
 		Set<Order> set = new HashSet<>();
