@@ -10,11 +10,11 @@ public enum OrderStatus {
 	private int code;
 	
 	private OrderStatus (int code) {
-		this.code = code;
+        this.code = code;
 	}
 	
 	public int getCode() {
-		return code;
+        return code;
 	}
 	
 	public static OrderStatus valueOf(int code) {

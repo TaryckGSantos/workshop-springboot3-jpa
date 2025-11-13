@@ -15,11 +15,13 @@ import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.EqualsAndHashCode.Include;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "tb_category")
 @Getter
+@NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Category implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -40,9 +42,6 @@ public class Category implements Serializable {
 
 	@Setter
 	private Boolean active = true;
-
-	public Category() {
-	}
 
 	public Category(Long id, String name) {
 		super();
