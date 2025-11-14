@@ -30,7 +30,7 @@ public class OrderResource {
         public Integer quantity;
     }
 
-	@GetMapping // Indica que o método responde a requisição do tipo get do HTTP
+	@GetMapping // Indica que o metodo responde a requisição do tipo get do HTTP
 	public ResponseEntity<List<Order>> findAll() {
 		List<Order> list = service.findAll();
 		return ResponseEntity.ok().body(list); // ok para retornar a resposta com sucesso no HTTP e body para retornar o

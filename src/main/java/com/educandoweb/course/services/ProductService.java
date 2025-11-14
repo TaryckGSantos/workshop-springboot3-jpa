@@ -19,25 +19,26 @@ import jakarta.transaction.Transactional;
 public class ProductService {
 
 	@Autowired
-	private ProductRepository repository;
+	private ProductRepository productRepository;
 
 	@Autowired
 	private CategoryRepository categoryRepository;
 
 	// Lista apenas ativos
 	public List<Product> findAll() {
-		return repository.findAll().stream().filter(p -> Boolean.TRUE.equals(p.getActive())).toList();
+		return productRepository.findAll().stream().filter(p -> Boolean.TRUE.equals(p.getActive())).toList();
 	}
 
 	// Busca apenas ativos
 	public Product findById(Long id) {
-		Product p = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+		Product p = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
 		if (!Boolean.TRUE.equals(p.getActive())) {
 			throw new ResourceNotFoundException(id);
 		}
 		return p;
 	}
 
+    @Transactional
 	public Product insert(Product obj) {
 		obj.setActive(true);
 
@@ -50,38 +51,40 @@ public class ProductService {
 	        obj.getCategories().add(existing);
 	    }
 	    
-		return repository.save(obj);
+		return productRepository.save(obj);
 	}
 
+    @Transactional
 	public Product update(Long id, Product obj) {
 		Product entity = findById(id);
 		entity.setName(obj.getName());
 		entity.setDescription(obj.getDescription());
 		entity.setPrice(obj.getPrice());
 		entity.setImgUrl(obj.getImgUrl());
-		return repository.save(entity);
+		return productRepository.save(entity);
 	}
 
 	// Marca como inativo
 	@Transactional
 	public void delete(Long id) {
-		Product entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
-		if (Boolean.FALSE.equals(entity.getActive()))
-			return; // já inativo
+		Product entity = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+		if (Boolean.FALSE.equals(entity.getActive())) {
+            return; // já inativo
+        }
 		entity.setActive(false);
-		repository.save(entity);
+		productRepository.save(entity);
 	}
 
 	// Restaura
 	@Transactional
 	public Product restore(Long id) {
-		Product entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+		Product entity = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
 		entity.setActive(true);
-		return repository.save(entity);
+		return productRepository.save(entity);
 	}
 
 	// Lista inativos
 	public List<Product> findAllInactive() {
-		return repository.findAll().stream().filter(p -> Boolean.FALSE.equals(p.getActive())).toList();
+		return productRepository.findAll().stream().filter(p -> Boolean.FALSE.equals(p.getActive())).toList();
 	}
 }

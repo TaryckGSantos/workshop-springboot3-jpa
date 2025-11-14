@@ -19,17 +19,17 @@ import jakarta.transaction.Transactional;
 public class CategoryService {
 
 	@Autowired
-	private CategoryRepository repository;
+	private CategoryRepository categoryRepository;
 
 	@Autowired
 	private ProductRepository productRepository;
 
 	public List<Category> findAll() {
-		return repository.findAll().stream().filter(c -> Boolean.TRUE.equals(c.getActive())).toList();
+		return categoryRepository.findAll().stream().filter(c -> Boolean.TRUE.equals(c.getActive())).toList();
 	}
 
 	public Category findById(Long id) {
-		Category c = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+		Category c = categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
 		if (!Boolean.TRUE.equals(c.getActive())) {
 			throw new ResourceNotFoundException(id);
 		}
@@ -39,19 +39,19 @@ public class CategoryService {
 	@Transactional
 	public Category insert(Category obj) {
 		obj.setActive(true);
-		return repository.save(obj);
+		return categoryRepository.save(obj);
 	}
 
 	@Transactional
 	public Category update(Long id, Category obj) {
 		Category entity = findById(id);
 		entity.setName(obj.getName());
-		return repository.save(entity);
+		return categoryRepository.save(entity);
 	}
 
 	@Transactional
 	public void delete(Long id) {
-		Category entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+		Category entity = categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
 		if (Boolean.FALSE.equals(entity.getActive()))
 			return; 
 
@@ -62,18 +62,18 @@ public class CategoryService {
 		productRepository.saveAll(linked);
 
 		entity.setActive(false);
-		repository.save(entity);
+		categoryRepository.save(entity);
 	}
 
 	// Restaurar (não reanexa automaticamente aos produtos)
 	@Transactional
 	public Category restore(Long id) {
-		Category entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+		Category entity = categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
 		entity.setActive(true);
-		return repository.save(entity);
+		return categoryRepository.save(entity);
 	}
 
 	public List<Category> findAllInactive() {
-		return repository.findAll().stream().filter(c -> Boolean.FALSE.equals(c.getActive())).toList();
+		return categoryRepository.findAll().stream().filter(c -> Boolean.FALSE.equals(c.getActive())).toList();
 	}
 }
